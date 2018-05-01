@@ -24,6 +24,9 @@ public class User implements Serializable{
     private Long id;
 
     @Getter @Setter
+    private String username;
+
+    @Getter @Setter
     private String password;
 
     @Getter @Setter
@@ -59,7 +62,7 @@ public class User implements Serializable{
     private Boolean enabled;
 
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id")
     private Plan plan;
 
