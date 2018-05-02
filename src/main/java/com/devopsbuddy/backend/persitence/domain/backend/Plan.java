@@ -1,5 +1,6 @@
 package com.devopsbuddy.backend.persitence.domain.backend;
 
+import com.devopsbuddy.enums.PlanEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,4 +32,8 @@ public class Plan implements Serializable {
     private List<User> users= new ArrayList<>();
     */
 
+    public Plan(PlanEnum planEnum){
+        this.id = planEnum.getId();
+        this.name = planEnum.getPlanName();
+    }
 }

@@ -8,6 +8,8 @@ import com.devopsbuddy.backend.persitence.domain.backend.UserRole;
 import com.devopsbuddy.backend.persitence.repositories.PlanRepository;
 import com.devopsbuddy.backend.persitence.repositories.RoleRepository;
 import com.devopsbuddy.backend.persitence.repositories.UserRepository;
+import com.devopsbuddy.enums.PlanEnum;
+import com.devopsbuddy.enums.RolesEnum;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +36,6 @@ public class RepositoriesIntegrationTest {
     @Autowired
     private UserRepository userRepo;
 
-    private static final Integer BASIC_PLAN_ID = 1;
-    private static final Integer BASIC_ROLE_ID = 1;
 
 
     @Before
@@ -46,17 +46,28 @@ public class RepositoriesIntegrationTest {
     }
 
     private Plan createBasicPlan(){
-        Plan plan= new Plan();
-        plan.setId(BASIC_PLAN_ID);
-        plan.setName("Basic");
+        Plan plan= new Plan(PlanEnum.BASIC);
         return plan;
 
     }
 
+    private Plan createBasicPlan(PlanEnum planEnum){
+        Plan plan= new Plan(planEnum);
+        return plan;
+
+    }
+
+
+
     private Role createRole(){
-        Role role = new Role();
-        role.setId(BASIC_ROLE_ID);
-        role.setName("USER_ROLE");
+        Role role = new Role(RolesEnum.BASIC);
+
+        return role;
+    }
+
+    private Role createRole(RolesEnum rolesEnum){
+        Role role = new Role(rolesEnum);
+
         return role;
     }
 
@@ -80,16 +91,16 @@ public class RepositoriesIntegrationTest {
     public void shouldCreateAPlan() throws Exception{
         Plan basicPlan= createBasicPlan();
         planRepo.save(basicPlan);
-        Plan myPlan= planRepo.getOne(BASIC_PLAN_ID);
+        Plan myPlan= planRepo.getOne(PlanEnum.BASIC.getId());
         Assert.assertNotNull(myPlan);
 
     }
 
     @Test
     public void shouldCreateARole() throws Exception{
-        Role userRole = createRole();
+        Role userRole = createRole(RolesEnum.BASIC);
         roleRepo.save(userRole);
-        Role myRol = roleRepo.getOne(BASIC_ROLE_ID);
+        Role myRol = roleRepo.getOne(RolesEnum.BASIC.getId());
         Assert.assertNotNull(myRol);
         //Assert.assertEquals(userRole, myRol);
 
@@ -109,9 +120,7 @@ public class RepositoriesIntegrationTest {
         myUser.setPlan(myPlan);
 
         Set<UserRole> userRoles = new HashSet<>();
-        UserRole myUserRol = new UserRole();
-        myUserRol.setRole(myRole);
-        myUserRol.setUser(myUser);
+        UserRole myUserRol = new UserRole(myUser, myRole);
         userRoles.add(myUserRol);
 
         myUser.getUserRoles().addAll(userRoles);
