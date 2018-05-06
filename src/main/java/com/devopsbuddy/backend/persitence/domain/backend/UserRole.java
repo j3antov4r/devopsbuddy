@@ -3,11 +3,12 @@ package com.devopsbuddy.backend.persitence.domain.backend;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "user_role")
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 public class UserRole implements Serializable {
 
@@ -15,14 +16,26 @@ public class UserRole implements Serializable {
     private static final long serialVersionUID= 1L;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter @Setter
+    private Integer id;
+
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @Getter @Setter
     private User user;
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     @Getter @Setter
     private Role role;
+
+
+    public UserRole(User user, Role role) {
+        this.user = user;
+        this.role = role;
+    }
 }

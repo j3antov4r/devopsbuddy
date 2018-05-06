@@ -1,5 +1,6 @@
 package com.devopsbuddy.config;
 
+import com.devopsbuddy.backend.service.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -19,6 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private UserSecurityService uservice;
 
     public static final String[] PUBLIC_MATCHERS = {
             "/webjars/**",
@@ -58,12 +62,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //esta linea la agregué yo para que funcionara la autenticacion, ya que
         //pide que haya un encoder para el password
+
         PasswordEncoder encoder =
-                PasswordEncoderFactories.createDelegatingPasswordEncoder();
+               PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth
                 .inMemoryAuthentication()
                 .withUser("user").password(encoder.encode("password"))
                 .roles("USER");
+
+          //   .userDetailsService(uservice).passwordEncoder(encoder);
+
     }
 
 
