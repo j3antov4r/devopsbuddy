@@ -28,6 +28,7 @@ public class User implements Serializable, UserDetails{
     private Long id;
 
     @Getter @Setter
+    @Column(unique = true)
     private String username;
 
      @Setter
@@ -35,6 +36,7 @@ public class User implements Serializable, UserDetails{
 
 
     @Getter @Setter
+    @Column(unique = true)
     private String email;
 
     @Column(name = "first_name")

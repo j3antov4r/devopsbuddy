@@ -58,7 +58,7 @@ public class RepositoriesIntegrationTest {
 
     }
 
-    private User storeBasicUser(){
+    private User storeBasicUser(String username, String email){
         Plan myPlan = createBasicPlan();
         myPlan= planRepo.save(myPlan);
 
@@ -67,7 +67,7 @@ public class RepositoriesIntegrationTest {
         myRole = roleRepo.save(myRole);
         Assert.assertNotNull(myRole);
 
-        User myUser = UserUtils.createBasicUser();
+        User myUser = UserUtils.createBasicUser(username, email);
         myUser.setPlan(myPlan);
 
         Set<UserRole> userRoles = new HashSet<>();
@@ -118,7 +118,7 @@ public class RepositoriesIntegrationTest {
     @Test
     public void shouldCreateAnUser() throws Exception {
 
-        User myUser = storeBasicUser();
+        User myUser = storeBasicUser("user", "user@gmail.com");
 
         User savedUser= userRepo.getOne(myUser.getId());
 
@@ -135,7 +135,7 @@ public class RepositoriesIntegrationTest {
 
     @Test
     public void shouldDeleteUser() {
-        User myUser = storeBasicUser();
+        User myUser = storeBasicUser("user2", "user2@gmail.com");
         userRepo.deleteById(myUser.getId());
         Assert.assertTrue(!userRepo.existsById(myUser.getId()));
     }

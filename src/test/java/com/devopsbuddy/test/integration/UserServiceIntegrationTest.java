@@ -10,7 +10,9 @@ import com.devopsbuddy.enums.RolesEnum;
 import com.devopsbuddy.utils.UserUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +28,9 @@ public class UserServiceIntegrationTest {
     @Autowired
     private UserService uservice;
 
+    @Rule
+    public TestName testName= new TestName();
+
     @Before
     public void setUp() throws Exception {
 
@@ -34,8 +39,12 @@ public class UserServiceIntegrationTest {
     @Test
     public void shouldCreateNewUser() throws Exception {
 
+        //de esta forma usamos valores desde la @Rule .. una maricura pues
+        String username = testName.getMethodName();
+        String email = testName.getMethodName() + "@gmail.com";
+
         Set<Role> urSet = new HashSet<>();
-        User myUser = UserUtils.createBasicUser();
+        User myUser = UserUtils.createBasicUser(username, email);
         urSet.add(new Role(RolesEnum.BASIC));
 
         User savedUser= uservice.createUser(myUser, PlanEnum.BASIC, urSet);
