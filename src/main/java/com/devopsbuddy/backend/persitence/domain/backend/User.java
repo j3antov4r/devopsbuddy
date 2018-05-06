@@ -31,7 +31,7 @@ public class User implements Serializable, UserDetails{
     @Column(unique = true)
     private String username;
 
-     @Setter
+     @Setter @Getter
     private String password;
 
 
@@ -73,10 +73,7 @@ public class User implements Serializable, UserDetails{
     @JoinColumn(name = "plan_id")
     private Plan plan;
 
-    @Override
-    public String getPassword() {
-        return MD5Util.md5Hex(password);
-    }
+
 
     @Getter @Setter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
