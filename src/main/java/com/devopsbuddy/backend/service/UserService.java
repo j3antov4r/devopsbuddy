@@ -9,6 +9,7 @@ import com.devopsbuddy.backend.persitence.repositories.RoleRepository;
 import com.devopsbuddy.backend.persitence.repositories.UserRepository;
 import com.devopsbuddy.enums.PlanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,16 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
 
     @Transactional
     public User createUser(User user, PlanEnum planEnum, Set<Role> userRoles){
+
+        String encryptedPass= passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPass);
 
         Plan myPlan = new Plan(planEnum);
 

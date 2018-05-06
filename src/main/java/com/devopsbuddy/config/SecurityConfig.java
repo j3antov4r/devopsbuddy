@@ -2,15 +2,18 @@ package com.devopsbuddy.config;
 
 import com.devopsbuddy.backend.service.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +26,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserSecurityService uservice;
+
+    /** The encryption SALT.  */
+    private static final String SALT="AA";
+
+
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder(12,new SecureRandom(SALT.getBytes()));
+    }
 
     public static final String[] PUBLIC_MATCHERS = {
             "/webjars/**",
@@ -63,14 +76,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //esta linea la agregué yo para que funcionara la autenticacion, ya que
         //pide que haya un encoder para el password
 
-        PasswordEncoder encoder =
-               PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        //PasswordEncoder encoder =
+        //       PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth
-                .inMemoryAuthentication()
-                .withUser("user").password(encoder.encode("password"))
-                .roles("USER");
+                //.inMemoryAuthentication()
+                //.withUser("user").password(encoder.encode("password"))
+                //.roles("USER");
 
-          //   .userDetailsService(uservice).passwordEncoder(encoder);
+                .userDetailsService(uservice)
+                .passwordEncoder(passwordEncoder());
 
     }
 
